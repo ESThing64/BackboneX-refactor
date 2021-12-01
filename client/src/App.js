@@ -1,5 +1,5 @@
 import './App.css';
-import Nav from './PortfolioContainer/Navbar/Navbar'
+import Nav from './Container/Navbar/Nav'
 
 
 function App() {

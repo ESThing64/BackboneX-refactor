@@ -30,17 +30,12 @@ const resolvers = {
         },
       );
     },
-    initNewUser: async (parent, { email, exerciseObjId }) => {
-
-      
-      return UserExercise.create(
-        { loginEmail: email },
-        {
-        },
-        {
-          new: true
-        },
-      );
+    initNewUser: async (parent, { email }) => {
+      const loginEmailData = UserExercise.create(
+        { $addToSet: { loginEmail: email }},
+        { new: true  },
+        );
+        return loginEmailData
     },
     removeExercise: async (parent, { email, exerciseObjId }) => {
       return UserExercise.findOneAndUpdate(

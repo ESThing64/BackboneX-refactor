@@ -18,10 +18,24 @@ const resolvers = {
   },
   Mutation: {
     addExercise: async (parent, { email, exerciseObjId }) => {
+
+      
       return UserExercise.findOneAndUpdate(
         { loginEmail: email },
         {
           $addToSet: { exercises: exerciseObjId },
+        },
+        {
+          new: true
+        },
+      );
+    },
+    initNewUser: async (parent, { email, exerciseObjId }) => {
+
+      
+      return UserExercise.create(
+        { loginEmail: email },
+        {
         },
         {
           new: true

@@ -10,7 +10,11 @@ export const ADD_EXERCISE = gql`
 export const INIT_USER = gql`
   mutation initNewUser($email: String!) {
     initNewUser(loginEmail: $email) {
+      
+      loginEmail{
       _id
+      loginEmail
+      }
     }
   }
 `;

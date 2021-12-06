@@ -20,7 +20,7 @@ type Query {
     exercises (type: String): [Exercise]
     bandExercises (type: String): [Exercise]
     stretchExercises (type: String): [Exercise]
-    userExercises (type: String): [UserExercise]
+    userExercises (type: String): UserExercise
   }
 type Mutation {
   addExercise(email: String!, exerciseObjId: ID! ): UserExercise

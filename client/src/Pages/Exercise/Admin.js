@@ -20,6 +20,7 @@ const Admin = () => {
   const exercises =  [];
   const [addVideo, { error }] = useMutation(ADD_VIDEO);
 
+  
   const [exerciseName, setExerciseName] = useState('')
   const [exercisePath, setExercisePath] = useState('')
   const [exerciseType, setExerciseType] = useState('video')

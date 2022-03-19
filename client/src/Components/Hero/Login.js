@@ -6,6 +6,14 @@ import loginApi from '../../utils/httpRoutes';
 import auth from "../../utils/auth"
 import { useForm } from "react-hook-form";
 
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+
+const schema = yup.object({
+  firstName: yup.string().required(),
+  age: yup.number().positive().integer().required(),
+}).required();
+
 
 function Login() {
   const emailInput = useRef()
@@ -18,8 +26,9 @@ function Login() {
   
   const handleClose = () => {
     setShow(false)
-    console.log('its running')
-    loginApi.login(emailInput.current.value, passwordInput.current.value).then((res) => {
+    console.log("email", email)
+    console.log("password", password)
+    loginApi.login(email, password).then((res) => {
       auth.login(res.data.token,res.data.UsersData.email);
     })
   }
@@ -28,8 +37,11 @@ function Login() {
   const handleShow = () => setShow(true);
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log("email", email)
+    console.log("password", password)
 
-    return name === 'email' ? setEmail(value) : setPassword(value)
+    name === 'email' && setEmail(value)
+    name === 'password' && setPassword(value)
 
   }
   const onSubmit = data => {
@@ -53,22 +65,23 @@ function Login() {
               <label htmlFor="email">Email</label>
               <input
               ref={emailInput}
-              defaultValue="test" {...register("email", {required: true, pattern: {value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, message: "This input is for emails only."}})}
+              defaultValue="test" {...register("email")}
                 type="email"
                 id="email"
                 name="email"
                 className="form-control"
+                onChange={handleChange}
                 placeholder="Enter Email"
               />
             </div>
             <div className="form-group">
               <label htmlFor="password">Password</label>
-              <input
-              defaultValue="test" {...register("password")}
-              ref={passwordInput}
+              <input type="password" {...register("password")}
+              defaultValue="test"
+                ref={passwordInput}
                 onChange={handleChange}
-                type="password"
-                id="password"
+                // type="password"
+                // id="password"
                 name="password"
                 className="form-control"
                 placeholder="Enter Password"

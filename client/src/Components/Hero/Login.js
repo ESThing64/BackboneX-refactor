@@ -9,10 +9,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 
-const schema = yup.object({
-  firstName: yup.string().required(),
-  age: yup.number().positive().integer().required(),
-}).required();
 
 
 function Login() {
@@ -33,24 +29,29 @@ function Login() {
     })
   }
   
-  const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  
+  const schema = yup.object({
+    email: yup.string().min(10).required(),
+    // password: yup.string().required(),
+  }).required();
+  const { register, handleSubmit, formState:{ errors } } = useForm({
+    resolver: yupResolver(schema)
+  });
   const handleShow = () => setShow(true);
   const handleChange = (e) => {
     const { name, value } = e.target;
     console.log("email", email)
     console.log("password", password)
-
+    
     name === 'email' && setEmail(value)
     name === 'password' && setPassword(value)
-
+    
   }
   const onSubmit = data => {
     handleClose()  
     console.log('heyyyy', data)}
-  
-  console.log(watch("email", 'password'));
-  return (
-    <>
+    return (
+      <>
       <Button variant="primary" onClick={handleShow}>
         Login
       </Button>
@@ -65,7 +66,7 @@ function Login() {
               <label htmlFor="email">Email</label>
               <input
               ref={emailInput}
-              defaultValue="test" {...register("email")}
+              {...register("email")}
                 type="email"
                 id="email"
                 name="email"
@@ -76,18 +77,19 @@ function Login() {
             </div>
             <div className="form-group">
               <label htmlFor="password">Password</label>
-              <input type="password" {...register("password")}
-              defaultValue="test"
+              <input
+               type="password" 
+              {...register("password")}
                 ref={passwordInput}
                 onChange={handleChange}
-                // type="password"
-                // id="password"
+                id="password"
                 name="password"
                 className="form-control"
                 placeholder="Enter Password"
               />
             </div>
-            <div> {errors.email && "email is required"}</div>
+            <div> {errors.email?.message }</div>
+            <div> {errors.password?.message}</div>
 
           <Button type="submit" variant="primary">
             Login

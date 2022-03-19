@@ -8,65 +8,52 @@ import { useForm } from "react-hook-form";
 
 
 function Login() {
-  const emailInput = useRef()
-  const passwordInput = useRef()
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  // const emailInput = useRef()
+  // const passwordInput = useRef()
   const [formState, setFormState] = useState({ email: '', password: '' });
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [show, setShow] = useState(false);
   
   
-  const handleClose = () => {
-    setShow(false)
-    console.log('its running')
-    loginApi.login(emailInput.current.value, passwordInput.current.value).then((res) => {
-      auth.login(res.data.token,res.data.UsersData.email);
-    })
-  }
   
-  const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  // const handleClose = () => {
+  //   setShow(false)
+    
+  //   loginApi.login(emailInput.current.value, passwordInput.current.value).then((res) => {
+  //     auth.login(res.data.token,res.data.UsersData.email);
+  //   })
+  // }
   const handleShow = () => setShow(true);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    return name === 'email' ? setEmail(value) : setPassword(value)
-
-  }
-  const onSubmit = data => {
-    handleClose()  
-    console.log('heyyyy', data)}
   
-  console.log(watch("email", 'password'));
+
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
         Login
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} >
         <Modal.Header closeButton>
           <Modal.Title>Login</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSubmit(onSubmit)} >
+          <form action="/users/login" method="POST">
             <div className="form-group">
               <label htmlFor="email">Email</label>
               <input
-              ref={emailInput}
-              defaultValue="test" {...register("email", {required: true, pattern: {value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, message: "This input is for emails only."}})}
+              // ref={emailInput}
                 type="email"
                 id="email"
                 name="email"
                 className="form-control"
                 placeholder="Enter Email"
+                register={register} required
               />
             </div>
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <input
-              defaultValue="test" {...register("password")}
-              ref={passwordInput}
-                onChange={handleChange}
+              // ref={passwordInput}
                 type="password"
                 id="password"
                 name="password"
@@ -74,19 +61,18 @@ function Login() {
                 placeholder="Enter Password"
               />
             </div>
-            <div> {errors.email && "email is required"}</div>
-
-          <Button type="submit" variant="primary">
-            Login
-          </Button>
           </form>
         </Modal.Body>
         <Modal.Footer>
+
+          <Button variant="primary" >
+            Login
+          </Button>
         </Modal.Footer>
 
       </Modal>
     </>
-  );
+  )
 }
 
-export default Login;
+export default Login
